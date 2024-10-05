@@ -13,14 +13,14 @@
     <meta name="twitter:site" content="@themepixels">
     <meta name="twitter:creator" content="@themepixels">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="XTremeOC">
-    <meta name="twitter:description" content="XTremeOC">
+    <meta name="twitter:title" content="Task Management">
+    <meta name="twitter:description" content="Task Management">
     <meta name="twitter:image" content="http://themepixels.me/bracketplus/img/bracketplus-social.png">
 
     <!-- Facebook -->
     <meta property="og:url" content="http://themepixels.me/bracketplus">
-    <meta property="og:title" content="XTremeOC">
-    <meta property="og:description" content="XTremeOC">
+    <meta property="og:title" content="Task Management">
+    <meta property="og:description" content="Task Management">
 
     <meta property="og:image" content="http://themepixels.me/bracketplus/img/bracketplus-social.png">
     <meta property="og:image:secure_url" content="http://themepixels.me/bracketplus/img/bracketplus-social.png">
@@ -29,7 +29,7 @@
     <meta property="og:image:height" content="600">
 
     <!-- Meta -->
-    <meta name="description" content="XTremeOC">
+    <meta name="description" content="Task Management">
     <meta name="author" content="ThemePixels">
 
     <title>Login Here</title>
@@ -74,15 +74,8 @@
     <div class="d-flex align-items-center justify-content-center ht-100v" style="background-color: #e1e1e1;">
 
         <div class="login-wrapper wd-300 wd-xs-400 pd-25 pd-xs-40 rounded shadow-base" style="background: #363352">
-            <div class="signin-logo tx-center tx-28 tx-bold tx-inverse">
-                <span class="tx-small">
-                    <p style="font-size: 18px;">
-                        <img width="100" src="{{ asset('images/logo.webp') }}" alt="">
-                    </p>
-                </span>
-            </div>
 
-            <form class="login-form ajax-form mt-5" action="{{ route('do.login') }}" method="post">
+            <form class="login-form ajax-form" action="{{ route('do.login') }}" method="post">
                 @csrf
 
                 <div class="row">

@@ -1,5 +1,5 @@
 
-<link rel="shortcut icon" href="{{ asset('images/fav.JPG') }}">
+<!-- <link rel="shortcut icon" href="{{ asset('images/fav.JPG') }}"> -->
 
 <!-- vendor css -->
 <link href="{{ asset('backend/lib/@fortawesome/fontawesome-free/css/all.min.css') }}" rel="stylesheet">

@@ -3,30 +3,30 @@
 namespace App\Http\Controllers\Backend\UserModule\Role;
 
 use App\Http\Controllers\Controller;
-use App\Models\UserModule\Module;
-use App\Models\UserModule\Role;
+use App\Http\Requests\Backend\Modules\UserModule\Role\CreateRoleRequest;
+use App\Interfaces\UserModule\Role\RoleReadInterface;
+use App\Interfaces\UserModule\Role\RoleWriteInterface;
+use App\Services\Backend\Modules\UserModule\RoleService;
 use App\Traits\ApiResponseTrait;
-use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
-use Yajra\DataTables\Facades\DataTables;
-
-use function Laravel\Prompts\warning;
 
 class RoleController extends Controller
 {
 
     use ApiResponseTrait;
+    protected $role_read_repository;
+    protected $role_write_repository;
+    protected $role_service;
 
-    /**
-     *** WARNING: !!! While changing the function please, care with extra caution. !!!
-     *** WARNING: !!! Don't forget to use proper validation and error handling. !!!
-     *** @copyright 2024
-     *** @author Md Sehirul Islam Rehi <mdsehirulislamrehi@gmail.com>
-     *** @method index
-     **/
+    public function __construct(RoleReadInterface $role_read_interface, RoleWriteInterface $role_write_interface, RoleService $role_service)
+    {
+        $this->role_read_repository = $role_read_interface;
+        $this->role_write_repository = $role_write_interface;
+        $this->role_service = $role_service;
+    }
+
     public function index()
     {
         if (can('roles')) {
@@ -36,56 +36,21 @@ class RoleController extends Controller
         }
     }
 
-
-    /**
-     *** WARNING: !!! While changing the function please, care with extra caution. !!!
-     *** WARNING: !!! Don't forget to use proper validation and error handling. !!!
-     *** @copyright 2024
-     *** @author Md Sehirul Islam Rehi <mdsehirulislamrehi@gmail.com>
-     *** @method data
-     **/
     public function data()
     {
         if (can('roles')) {
-            $role = Role::select("id", "name", "is_active");
-
-            return DataTables::of($role)
-                ->addIndexColumn()
-                ->rawColumns(['action', 'is_active'])
-                ->editColumn('is_active', function (Role $role) {
-                    if ($role->is_active == true) {
-                        return '<p class="badge badge-success">Active</p>';
-                    } else {
-                        return '<p class="badge badge-danger">Inactive</p>';
-                    }
-                })
-                ->addColumn('action', function (Role $role) {
-                    return '
-                    ' . (can("roles") ? '
-                        <button type="button" data-content="' . route('role.edit', $role->id) . '" data-target="#largeModal" class="btn btn-outline-dark" data-toggle="modal">
-                            Edit
-                        </button>
-                    ' : '') . '
-                ';
-                })
-                ->make(true);
+            $roles = $this->role_read_repository->get_all_role_data();
+            return $this->role_read_repository->role_datatable($roles);
         } else {
             return view("errors.404");
         }
     }
 
-    /**
-     *** WARNING: !!! While changing the function please, care with extra caution. !!!
-     *** WARNING: !!! Don't forget to use proper validation and error handling. !!!
-     *** @copyright 2024
-     *** @author Md Sehirul Islam Rehi <mdsehirulislamrehi@gmail.com>
-     *** @method add_modal
-     **/
     public function add_modal()
     {
         try {
             if (can("roles")) {
-                $modules = Module::orderBy("position", "asc")->select("id", "name", "key")->with("permission")->get();
+                $modules = $this->role_service->get_modules_for_role();
                 return view("backend.modules.user_module.role.modals.add", compact("modules"));
             } else {
                 return unauthorized();
@@ -95,74 +60,30 @@ class RoleController extends Controller
         }
     }
 
-    /**
-     *** WARNING: !!! While changing the function please, care with extra caution. !!!
-     *** WARNING: !!! Don't forget to use proper validation and error handling. !!!
-     *** @copyright 2024
-     *** @author Md Sehirul Islam Rehi <mdsehirulislamrehi@gmail.com>
-     *** @method add
-     **/
-    public function add(Request $request)
+
+    public function add(CreateRoleRequest $request)
     {
-        if (can('roles')) {
-
-            $validator = Validator::make($request->all(), [
-                'name' => 'required|unique:roles,name',
-            ]);
-
-            if ($validator->fails()) {
-                return response()->json(['errors' => $validator->errors()], 422);
-            } else {
-                try {
-                    if ($request['permission']) {
-
-                        $role = new Role();
-                        $role->name = $request->name;
-                        $role->is_active = true;
-
-                        if ($role->save()) {
-
-                            $data = [];
-                            foreach ($request['permission'] as $permission) {
-                                array_push($data, [
-                                    'role_id' => $role->id,
-                                    'permission_id' => $permission,
-                                    'created_at' => Carbon::now(),
-                                    'updated_at' => Carbon::now(),
-                                ]);
-                            }
-
-                            DB::table('permission_role')->insert($data);
-
-                            return $this->success(null, "New role created");
-                        }
-                    } else {
-                        return $this->warning(null, "Please choose user permission");
-                    }
-                } catch (Exception $e) {
-                    return $this->error(null, $e->getMessage());
-                }
+        try {
+            if (can('roles')) {
+                DB::beginTransaction();
+                return $this->role_write_repository->create($request);
+            } 
+            else {
+                return $this->warning(null, unauthorized());
             }
-        } else {
-            return $this->warning(null, unauthorized());
+        } catch (Exception $e) {
+            DB::rollBack();
+            return $this->error(null, $e->getMessage());
         }
     }
 
-    /**
-     *** WARNING: !!! While changing the function please, care with extra caution. !!!
-     *** WARNING: !!! Don't forget to use proper validation and error handling. !!!
-     *** @copyright 2024
-     *** @author Md Sehirul Islam Rehi <mdsehirulislamrehi@gmail.com>
-     *** @method add_modal
-     **/
+
     public function edit($id)
     {
         if (can('roles')) {
-
-            $role = Role::where("id", $id)->first();
-
+            $role = $this->role_read_repository->get_role_by_id($id);
             if ($role) {
-                $modules = Module::orderBy("position", "asc")->select("id", "name", "key")->with("permission")->get();
+                $modules = $this->role_service->get_modules_for_role();
                 return view("backend.modules.user_module.role.modals.edit", compact('role', 'modules'));
             } else {
                 return "No role found";
@@ -172,61 +93,21 @@ class RoleController extends Controller
         }
     }
 
-    /**
-     *** WARNING: !!! While changing the function please, care with extra caution. !!!
-     *** WARNING: !!! Don't forget to use proper validation and error handling. !!!
-     *** @copyright 2024 MIS
-     *** @author Md Sehirul Islam Rehi <mdsehirulislamrehi@gmail.com>
-     *** @method update
-     **/
+
     public function update(Request $request, $id)
     {
-        if (can('roles')) {
-            $validator = Validator::make($request->all(), [
-                'name' => 'required',
-            ]);
-
-            if ($validator->fails()) {
-                return response()->json(['errors' => $validator->errors()], 422);
-            } else {
-                try {
-                    if ($request['permission']) {
-
-                        $role = Role::find($id);
-
-                        if (!$role) {
-                            return $this->warning(null, "Role not found");
-                        }
-
-                        $role->name = $request->name;
-                        $role->is_active = $request->is_active;
-
-                        if ($role->save()) {
-
-                            $data = [];
-                            foreach ($request['permission'] as $permission) {
-                                array_push($data, [
-                                    'role_id' => $role->id,
-                                    'permission_id' => $permission,
-                                    'created_at' => Carbon::now(),
-                                    'updated_at' => Carbon::now(),
-                                ]);
-                            }
-
-                            DB::statement("DELETE FROM permission_role WHERE role_id = $role->id");
-                            DB::table('permission_role')->insert($data);
-
-                            return $this->success(null, 'Role Updated Successfully');
-                        }
-                    } else {
-                        return $this->warning(null, "Please choose user permission");
-                    }
-                } catch (Exception $e) {
-                    return $this->error(null, $e->getMessage());
-                }
+        try {
+            if (can('roles')) {
+                DB::beginTransaction();
+                return $this->role_write_repository->update($request, $id);
+            } 
+            else {
+                return $this->warning(null, unauthorized());
             }
-        } else {
-            return $this->warning(null, unauthorized());
+        } 
+        catch (Exception $e) {
+            DB::rollBack();
+            return $this->error(null, $e->getMessage());
         }
     }
 }

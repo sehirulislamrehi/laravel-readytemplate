@@ -3,26 +3,21 @@
 namespace App\Http\Controllers\Backend\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Services\Backend\Auth\AuthenticationService;
 
 class LogoutController extends Controller
 {
 
-    /**
-     *** WARNING: !!! While changing the function please, care with extra caution. !!!
-     *** WARNING: !!! Don't forget to use proper validation and error handling. !!!
-     *** @copyright 2024
-     *** @author Md Sehirul Islam Rehi <mdsehirulislamrehi@gmail.com>
-     *** @method do_login
-     **/
+    protected AuthenticationService $authentication_service;
+
+    public function __construct(AuthenticationService $authentication_service)
+    {
+        $this->authentication_service = $authentication_service;
+    }
+
     public function do_logout()
     {
-        if( auth('web')->check() ){
-            $user = auth('web')->user();
-            Auth::guard('web')->logout($user);
-        }
-
+        $this->authentication_service->do_logout();        
         return redirect()->route('login.page');
     }
 

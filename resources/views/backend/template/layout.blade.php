@@ -11,14 +11,14 @@
     <meta name="twitter:site" content="@themepixels">
     <meta name="twitter:creator" content="@themepixels">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="XTremeOC">
-    <meta name="twitter:description" content="XTremeOC">
+    <meta name="twitter:title" content="Task Management">
+    <meta name="twitter:description" content="Task Management">
     <meta name="twitter:image" content="http://themepixels.me/bracketplus/img/bracketplus-social.png">
 
     <!-- Facebook -->
     <meta property="og:url" content="http://themepixels.me/bracketplus">
-    <meta property="og:title" content="XTremeOC">
-    <meta property="og:description" content="XTremeOC">
+    <meta property="og:title" content="Task Management">
+    <meta property="og:description" content="Task Management">
 
     <meta property="og:image" content="http://themepixels.me/bracketplus/img/bracketplus-social.png">
     <meta property="og:image:secure_url" content="http://themepixels.me/bracketplus/img/bracketplus-social.png">
@@ -27,10 +27,10 @@
     <meta property="og:image:height" content="600">
 
     <!-- Meta -->
-    <meta name="description" content="XTremeOC">
+    <meta name="description" content="Task Management">
     <meta name="author" content="ThemePixels">
 
-    <title>XTremeOC</title>
+    <title>Task Management</title>
 
     @include("backend.includes.css")
 
@@ -84,7 +84,7 @@
     @if( session()->has('success') || session()->has('warning') || session()->has('error') )
     <div class="alert alert-dismissible fade show custom-alert" role="alert">
         <div class="logo">
-            <p>XTremeOC</p>
+            <p>Task Management</p>
         </div>
         <hr>
         @if( session()->get('success') )

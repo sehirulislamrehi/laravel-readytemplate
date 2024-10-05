@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
             $table->unsignedBigInteger('role_id')->nullable();
             $table->boolean('is_active')->default(true);
             $table->boolean('is_super_admin')->default(false);
+            $table->text('remember_token')->nullable();
             $table->timestamps();
         });
     }
