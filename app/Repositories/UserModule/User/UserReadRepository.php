@@ -4,6 +4,7 @@ namespace App\Repositories\UserModule\User;
 
 use App\Interfaces\UserModule\User\UserReadInterface;
 use App\Models\UserModule\User;
+use App\Services\Backend\Modules\CommonModule\CommonService;
 use App\Traits\FilePathTrait;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -11,31 +12,44 @@ class UserReadRepository implements UserReadInterface
 {
 
     use FilePathTrait;
+    protected $common_service;
+
+    public function __construct(CommonService $common_service)
+    {
+        $this->common_service = $common_service;
+    }
 
     public function get_all_user_data()
     {
-        return User::orderBy('id', 'desc')->select("id", "name", "email", "phone", "is_active", "role_id", "image")->with("role");
+        $auth = auth('web')->user();
+        return User::orderBy('id', 'desc')->select("id", "name", "email", "phone", "is_active", "role_id", "image")->where("id","!=",$auth->id)->with("role");
     }
 
     public function get_active_user_data()
     {
-        return User::orderBy('id', 'desc')->select("id", "name", "email", "phone", "is_active", "role_id", "image")->where("is_active", true)->with("role");
+        $auth = auth('web')->user();
+        return User::orderBy('id', 'desc')->select("id", "name", "email", "phone", "is_active", "role_id", "image")->where("id","!=",$auth->id)->where("is_active", true)->with("role");
     }
 
     public function user_datatable($user)
     {
         return DataTables::of($user)
             ->addIndexColumn()
+            ->order(function($user) {
+                $user->orderBy('id', 'desc');  // Apply ordering here
+            })
             ->rawColumns(['action', 'is_active', 'role_id', 'image'])
             ->editColumn('image', function (User $user) {
+                
+
                 if ($user->image == null) {
-                    $src = asset("images/profile/user.png");
+                    $image = asset("images/profile/user.png");
                 } else {
-                    $src = asset($this->get_file_path("profile")) . '/' . $user->image;
+                    $image = $this->common_service->get_image_link($user->image,$this->get_file_path("profile"));
                 }
 
                 return "
-                    <img src='$src' width='25px' style='border-radius: 100%'>
+                    <img src='$image' width='25px' style='border-radius: 100%'>
                 ";
             })
             ->editColumn('role_id', function (User $user) {
@@ -79,6 +93,12 @@ class UserReadRepository implements UserReadInterface
 
     public function get_user_by_id($id){
         return User::where("id",$id)->select("name","email","phone","role_id","is_active","id")->first();
+    }
 
+    public function get_user_by_email($email){
+        if($email){
+            return User::where("email","LIKE","%".$email."%")->select("name","id","email")->take(1000)->get();
+        }
+        return [];
     }
 }

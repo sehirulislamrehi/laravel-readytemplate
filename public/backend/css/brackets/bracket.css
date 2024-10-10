@@ -150,7 +150,7 @@ body {
   line-height: 1.5;
   color: #868ba1;
   text-align: left;
-  background-color: #E9ECEF; }
+  background-color: #f4f6f9; }
 
 [tabindex="-1"]:focus {
   outline: 0 !important; }
@@ -12102,7 +12102,7 @@ table.dataTable {
   border: 0;
   box-shadow: none; }
   .medium-editor-toolbar li button {
-    background-color: #1D2939;
+    background-color: #1C1D21;
     background-image: none;
     box-shadow: none;
     border-right: 0; }
@@ -12122,7 +12122,7 @@ table.dataTable {
     color: #17A2B8; }
 
 .medium-toolbar-arrow-under::after {
-  border-top-color: #1D2939; }
+  border-top-color: #1C1D21; }
 
 /* ------------------------------------------- */
 /* ############### 4.11 Morris ############### */
@@ -13170,7 +13170,7 @@ table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > td:first-child::
   bottom: 0;
   z-index: 100;
   width: 230px;
-  background-color: #1D2939;
+  background-color: #1C1D21;
   /* padding-left: 10px;
   padding-right: 10px; */
   transition: all 0.2s ease-in-out; }
@@ -13428,7 +13428,7 @@ table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > td:first-child::
   bottom: 0;
   z-index: 2000;
   width: 280px;
-  background-color: #1D2939;
+  background-color: #1C1D21;
   transition: all 0.2s ease-in-out; }
   @media screen and (prefers-reduced-motion: reduce) {
     .br-sideright {
@@ -13500,7 +13500,7 @@ table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > td:first-child::
     border-radius: 0;
     width: 100%; }
     .sidebar-tabs .nav-link.active {
-      background-color: #1D2939;
+      background-color: #1C1D21;
       color: #1CAF9A; }
 
 .contact-list-link {
@@ -13542,7 +13542,7 @@ table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > td:first-child::
   position: absolute;
   bottom: 0;
   right: 0;
-  border: 2px solid #1D2939;
+  border: 2px solid #1C1D21;
   border-radius: 50px; }
 
 .media-file-list {
@@ -15014,7 +15014,7 @@ table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > td:first-child::
     border: 0; }
 
 .br-foot {
-  background-color: #1D2939;
+  background-color: #1C1D21;
   font-size: 13px; }
   .br-foot .container {
     padding: 30px 15px; }
@@ -15156,7 +15156,7 @@ table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > td:first-child::
   background-color: #1CAF9A; }
 
 .bg-br-primary {
-  background-color: #1D2939; }
+  background-color: #1C1D21; }
 
 .bg-lightsky {
   background-color: #E4F2F2; }
@@ -15327,7 +15327,7 @@ table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > td:first-child::
   border-color: #fff; }
 
 .bd-br-primary {
-  border-color: #1D2939; }
+  border-color: #1C1D21; }
 
 .bd-gray-100 {
   border-color: #f8f9fa; }
@@ -34089,7 +34089,7 @@ a.hover-white-8:hover, a.hover-white-8:focus {
   color: #212529; }
 
 .tx-br-primary {
-  color: #1D2939; }
+  color: #1C1D21; }
 
 .tx-white-2 {
   color: rgba(255, 255, 255, 0.2); }

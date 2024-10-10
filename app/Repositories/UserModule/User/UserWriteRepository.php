@@ -4,6 +4,7 @@ namespace App\Repositories\UserModule\User;
 
 use App\Interfaces\UserModule\User\UserWriteInterface;
 use App\Models\UserModule\User;
+use App\Services\Backend\Modules\CommonModule\CommonService;
 use App\Traits\ApiResponseTrait;
 use App\Traits\FilePathTrait;
 use Illuminate\Support\Facades\File;
@@ -14,6 +15,11 @@ class UserWriteRepository implements UserWriteInterface
 {
 
     use ApiResponseTrait, FilePathTrait;
+     protected $common_service;
+     public function __construct(CommonService $common_service)
+     {
+          $this->common_service = $common_service;
+     }
 
     public function create($request)
     {
@@ -53,15 +59,14 @@ class UserWriteRepository implements UserWriteInterface
         $user->email = $request->email;
         $user->phone = $request->phone;
 
-        if ($request->file) {
-            $profile_image_path = public_path($this->get_file_path("profile"));
-            if (File::exists($profile_image_path . $user->image)) {
-                File::delete($profile_image_path . $user->image);
+        $file = $request->file('file');
+        $folder = $this->get_file_path("profile");
+
+        if($file){
+            $filename = rand(00000,99999) .'_'. time() .'.'. $file->getClientOriginalExtension();
+            if( $this->common_service->file_upload($file,$filename,$folder,null) ){
+                $user->image = $filename;
             }
-            $image = $request->file('file');
-            $img = time() . Str::random(5) . '.' . $image->getClientOriginalExtension();
-            $image->move($profile_image_path, $img);
-            $user->image = $img;
         }
 
         if ($user->save()) {

@@ -19,6 +19,9 @@ class RoleReadRepository implements RoleReadInterface{
     public function role_datatable($roles){
         return DataTables::of($roles)
         ->addIndexColumn()
+        ->order(function($roles) {
+            $roles->orderBy('id', 'desc');  // Apply ordering here
+        })
         ->rawColumns(['action', 'is_active'])
         ->editColumn('is_active', function (Role $role) {
             if ($role->is_active == true) {

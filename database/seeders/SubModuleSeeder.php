@@ -19,7 +19,6 @@ class SubModuleSeeder extends Seeder
 
         DB::table('sub_modules')->insert([
 
-
             //module id 1 start
             [
                 'id' => 1,
@@ -38,10 +37,9 @@ class SubModuleSeeder extends Seeder
                 'module_id' => 1,
             ],
             //module id 1 end
-
         
         ]);
 
-        //last id 18
+        //last id 2
     }
 }

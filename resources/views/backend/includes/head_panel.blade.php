@@ -9,7 +9,7 @@
 
                <div class="dropdown">
                     <a href="" class="nav-link nav-link-profile" data-toggle="dropdown">
-                         <img src="{{ auth('web')->user()->image ? $get_file_path .'/'. auth('web')->user()->image : asset('images/user.png') }}" class="wd-32 rounded-circle" alt="">
+                         <img src="{{ asset('images/user.png') }}" class="wd-32 rounded-circle" alt="">
                          <span class="square-10 bg-success"></span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-header wd-250" x-placement="top-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(-65px, 1px, 0px);">

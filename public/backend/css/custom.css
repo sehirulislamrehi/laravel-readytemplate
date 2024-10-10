@@ -44,6 +44,7 @@ h1,h2,h3,h4,h5,h6{
 }
 .modal-content {
     border-radius: 0;
+    border-radius: 15px;
 }
 button{
     border-radius: 0!important;
@@ -156,7 +157,7 @@ div.dataTables_wrapper div.dataTables_processing {
     width: 100px;
 }
 .br-logo{
-    background: #1d2939;
+    background: #1C1D21;
     border-bottom: 2px solid white;
 }
 .br-logo a{
@@ -172,4 +173,10 @@ button{
 }
 .form-layout-footer{
     text-align: right;
+}
+button{
+    border-radius: 30px!important;
+}
+.card{
+    border-radius: 20px!important;
 }

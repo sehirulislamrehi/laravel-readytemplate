@@ -1,9 +1,7 @@
 <?php
 
-use App\Http\Controllers\Backend\UserModule\User\UserCoverageController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Backend\UserModule\User\UserController;
-use App\Http\Controllers\Backend\UserModule\User\UserDebitCreditController;
 
 //user start 
     Route::group(['prefix' => 'user'], function(){

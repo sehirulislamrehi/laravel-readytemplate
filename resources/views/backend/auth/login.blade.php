@@ -90,7 +90,7 @@
                         <i class="fas fa-eye show-password"></i>
                         <i class="fas fa-eye-slash hide-password"></i>
                         <label>Password</label>
-                        <input type="password" name="password" class="form-control" placeholder="Hris Password" id="password-field">
+                        <input type="password" name="password" class="form-control" placeholder="Password" id="password-field">
                     </div>
                 </div>
 

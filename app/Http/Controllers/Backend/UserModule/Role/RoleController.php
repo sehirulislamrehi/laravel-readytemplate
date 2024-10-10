@@ -32,7 +32,7 @@ class RoleController extends Controller
         if (can('roles')) {
             return view("backend.modules.user_module.role.index");
         } else {
-            return view("errors.404");
+            return view("errors.403");
         }
     }
 
@@ -42,7 +42,7 @@ class RoleController extends Controller
             $roles = $this->role_read_repository->get_all_role_data();
             return $this->role_read_repository->role_datatable($roles);
         } else {
-            return view("errors.404");
+            return view("errors.403");
         }
     }
 

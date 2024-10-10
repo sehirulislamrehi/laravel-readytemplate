@@ -12,12 +12,15 @@ namespace App\Traits;
  */
 trait FilePathTrait
 {
- 
-    protected function get_file_path($type)
-    {
-        if( $type === "profile" ){
-          return "images/profile/";
-        }
-    }
-}
 
+  //all are sotrage path
+  protected function get_file_path($type)
+  {
+    if ($type === "profile") {
+      return "profile";
+    }
+    if ($type === "task") {
+      return "tasks";
+    }
+  }
+}

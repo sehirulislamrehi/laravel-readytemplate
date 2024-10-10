@@ -14,7 +14,7 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::statement("DELETE FROM users");
+        DB::statement("DELETE FROM users WHERE id = 1");
         DB::table('users')->insert([
             [
                 'id' => 1,

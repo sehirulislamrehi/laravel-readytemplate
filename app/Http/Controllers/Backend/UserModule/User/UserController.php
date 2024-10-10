@@ -11,6 +11,7 @@ use App\Http\Requests\Backend\Modules\UserModule\User\ResetPasswordRequest;
 use App\Interfaces\UserModule\Role\RoleReadInterface;
 use App\Interfaces\UserModule\User\UserReadInterface;
 use App\Interfaces\UserModule\User\UserWriteInterface;
+use App\Services\Backend\Modules\CommonModule\CommonService;
 use App\Services\Backend\Modules\UserModule\UserService;
 use App\Traits\ApiResponseTrait;
 use App\Traits\FilePathTrait;
@@ -24,17 +25,21 @@ class UserController extends Controller
     protected $user_write_repository;
     protected $user_service;
     protected $role_read_repository;
+    protected $common_service;
 
     public function __construct(
         UserReadInterface $user_read_interface,
         UserWriteInterface $user_write_interface,
         UserService $user_service,
-        RoleReadInterface $role_read_interface
+        RoleReadInterface $role_read_interface,
+        CommonService $common_service
     ) {
         $this->user_read_repository = $user_read_interface;
         $this->user_write_repository = $user_write_interface;
         $this->user_service = $user_service;
         $this->role_read_repository = $role_read_interface;
+        $this->role_read_repository = $role_read_interface;
+        $this->common_service = $common_service;
     }
 
     public function index()
@@ -49,11 +54,16 @@ class UserController extends Controller
 
     public function data()
     {
-        if (can('all_user')) {
-            $user = $this->user_read_repository->get_all_user_data();
-            return $this->user_read_repository->user_datatable($user);
-        } else {
-            return unauthorized();
+        try{
+            if (can('all_user')) {
+                $user = $this->user_read_repository->get_all_user_data();
+                return $this->user_read_repository->user_datatable($user);
+            } else {
+                return unauthorized();
+            }
+        }
+        catch( Exception $e ){
+            return $e->getMessage();
         }
     }
 
@@ -159,8 +169,7 @@ class UserController extends Controller
     {
         try {
             $auth = auth('web')->user();
-            $get_file_path = asset($this->get_file_path("profile"));
-            $image = $get_file_path . '/' . (isset($auth->image) ? $auth->image : 'user.png');
+            $image = $this->common_service->get_image_link($auth->image,$this->get_file_path("profile"));
 
             return view("backend.modules.user_module.user.pages.edit_my_profile", compact("auth", "image"));
         } catch (Exception $e) {
